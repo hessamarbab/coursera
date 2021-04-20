@@ -19,12 +19,13 @@ class EnrolController extends Controller
         return DB::transaction(function() use($data)
             {
                 $course=Course::where(["id"=>$data['course_id']])->lockForUpdate()->first();
-                if($course->students()->count()>=$course->capacity){
-                    throw new HttpException(400,"capacity filled");
-                }
                 if($course->students()->where(['students.id'=>$data['student_id']])->exists()){
                     throw new HttpException(400,"you had enrolled before");
                 }
+                if($course->students()->count()>=$course->capacity){
+                    throw new HttpException(400,"capacity filled");
+                }
+
 
                 $enrol=Enrol::create($data);
 
