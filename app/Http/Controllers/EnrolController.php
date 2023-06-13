@@ -16,7 +16,7 @@ class EnrolController extends Controller
     {
         $data=$request->only('student_id','course_id');
 
-        return DB::transaction(function() use($data)
+        return DB::transaction(function() use ($data)
             {
                 $course=Course::where(["id"=>$data['course_id']])->lockForUpdate()->first();
                 if($course->students()->where(['students.id'=>$data['student_id']])->exists()){
